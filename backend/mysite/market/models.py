@@ -27,7 +27,14 @@ class SubCategory(models.Model):
 
 
 class PhoneNumber(models.Model):
-    number = models.CharField(max_length=13, verbose_name='номер телефона')
+    number = models.CharField(max_length=50, verbose_name='номер телефона')
+
+    def __str__(self):
+        return self.number
+
+    class Meta:
+        verbose_name = 'номер'
+        verbose_name_plural = 'номера'
 
 
 class Enterprise(models.Model):
@@ -37,7 +44,7 @@ class Enterprise(models.Model):
     city = models.CharField(max_length=30, verbose_name='Город')
     adress = models.CharField(max_length=100, verbose_name='Адрес')
     phone = models.ForeignKey(PhoneNumber, on_delete=models.CASCADE,
-                              verbose_name='номер')
+                              verbose_name='номер', related_name='phones')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL,
                                  verbose_name='категория', null=True,
                                  blank=True)
@@ -47,6 +54,9 @@ class Enterprise(models.Model):
 
     def __str__(self):
         return self.name
+
+    def numbers(self):
+        return (i for i in self.phonenumbers.all())
 
     class Meta:
         verbose_name = 'Предприятие'

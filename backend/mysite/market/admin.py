@@ -15,12 +15,16 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Enterprise)
 class EnterpriseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_image')
+    list_display = ('name', 'get_image', 'description', 'city', 'adress', 'number')
 
     def get_image(self, obj):
         return mark_safe(f'<img src={obj.image.url} width="100" ')
 
     get_image.short_description = 'логотип'
+
+    def number(self, obj):
+        return obj.phone.number
+    number.admin_order_field = 'number'
 
 
 admin.site.register(PhoneNumber)
